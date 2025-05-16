@@ -46,24 +46,27 @@ const reviewController = {
 
 
 
-
   addOrUpdateReview: async (req, res) => {
     const userId = req.signedCookies.user_id;
-    const movieId = req.params.movieId;
-  
-    // Check if the movie exists
-    const [movies] = await db.query("SELECT id FROM movies WHERE id = ?", [movieId]);
-  
-    if (movies.length === 0) {
-      return res.status(404).json({ message: "Movie not found" });
-    }
-  
-    // Get content as plain text and rating from request
-    const content = req.body; // Plain text content
-    const rating = req.query.rating; // Get rating from query parameter
-  
-    const numericRating = parseFloat(rating);
-    
+const movieId = req.params.movieId;
+
+// Check if the movie exists
+const [movies] = await db.query("SELECT id FROM movies WHERE id = ?", [movieId]);
+
+if (movies.length === 0) {
+  return res.status(404).json({ message: "Movie not found" });
+}
+
+// Parse content and rating from JSON body
+const { content, rating } = req.body;
+
+if (!content || typeof rating === 'undefined') {
+  return res.status(400).json({ message: "Content and rating are required" });
+}
+
+const numericRating = parseFloat(rating);
+
+
     if (numericRating < 1 || numericRating > 10) {
       return res.status(400).json({ message: "Rating must be between 1 and 10" });
     }
