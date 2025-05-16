@@ -62,15 +62,10 @@ const { content } = req.body;
 const rating = req.query.rating;
 
 if (!content || typeof rating === 'undefined') {
-  return res.status(400).json({ message: "Content and rating are required" });
+  return res.status(400).json({ message: content });
 }
 
 const numericRating = parseFloat(rating);
-
-
-    if (numericRating < 1 || numericRating > 10) {
-      return res.status(400).json({ message: "Rating must be between 1 and 10" });
-    }
 
     // Update average rating and rating count
     await db.query(
