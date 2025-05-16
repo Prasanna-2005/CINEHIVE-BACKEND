@@ -58,7 +58,8 @@ if (movies.length === 0) {
 }
 
 // Parse content and rating from JSON body
-const { content, rating } = req.body;
+const { content } = req.body;
+const rating = req.query.rating;
 
 if (!content || typeof rating === 'undefined') {
   return res.status(400).json({ message: "Content and rating are required" });
